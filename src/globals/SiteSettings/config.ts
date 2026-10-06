@@ -69,12 +69,40 @@ export const SiteSettings: GlobalConfig = {
       },
     },
     {
+      name: 'brandLine',
+      type: 'text',
+      admin: {
+        description: 'Tagline or brand slogan',
+      },
+    },
+    {
       name: 'contactEmail',
       type: 'email',
     },
     {
+      name: 'secondaryEmail',
+      type: 'email',
+      admin: {
+        description: 'Additional contact or marketing email',
+      },
+    },
+    {
       name: 'contactPhone',
       type: 'text',
+    },
+    {
+      name: 'secondaryPhone',
+      type: 'text',
+      admin: {
+        description: 'Alternate phone number',
+      },
+    },
+    {
+      name: 'businessHours',
+      type: 'text',
+      admin: {
+        description: 'e.g. Mon-Fri 8:30 AM - 5:30 PM, Sat 8:30 AM - 1:00 PM',
+      },
     },
     {
       name: 'address',

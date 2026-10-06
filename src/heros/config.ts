@@ -1,4 +1,4 @@
-import type { Field } from 'payload'
+import type { GroupField } from 'payload'
 
 import {
   FixedToolbarFeature,
@@ -9,9 +9,10 @@ import {
 
 import { linkGroup } from '@/fields/linkGroup'
 
-export const hero: Field = {
+export const hero: GroupField = {
   name: 'hero',
   type: 'group',
+  localized: true,
   fields: [
     {
       name: 'type',
@@ -63,9 +64,10 @@ export const hero: Field = {
       type: 'upload',
       admin: {
         condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
+        description: 'Optional background image or graphic',
       },
       relationTo: 'media',
-      required: true,
+      required: false,
     },
   ],
   label: false,

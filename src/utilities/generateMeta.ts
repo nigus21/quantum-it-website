@@ -26,9 +26,12 @@ export const generateMeta = async (args: {
 
   const ogImage = getImageURL(doc?.meta?.image)
 
-  const title = doc?.meta?.title
-    ? doc?.meta?.title + ' | Payload Website Template'
-    : 'Payload Website Template'
+  const rawTitle = doc?.meta?.title || doc?.title
+  const title = rawTitle
+    ? rawTitle.includes('Quantum')
+      ? rawTitle
+      : `${rawTitle} | Quantum IT & Security Solutions`
+    : 'Quantum IT & Security Solutions PLC | ICT, Cybersecurity & Solar Ethiopia'
 
   return {
     description: doc?.meta?.description,

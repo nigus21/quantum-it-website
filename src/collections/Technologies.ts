@@ -27,7 +27,7 @@ export const Technologies: CollectionConfig = {
       name: 'logo',
       type: 'upload',
       relationTo: 'media',
-      required: true,
+      required: false,
     },
     {
       name: 'website',
@@ -57,14 +57,18 @@ export const Technologies: CollectionConfig = {
     afterChange: [
       ({ req: { context } }) => {
         if (!context?.disableRevalidate) {
-          revalidateTag('technologies', 'max')
+          try {
+            revalidateTag('technologies', 'max')
+          } catch {}
         }
       },
     ],
     afterDelete: [
       ({ req: { context } }) => {
         if (!context?.disableRevalidate) {
-          revalidateTag('technologies', 'max')
+          try {
+            revalidateTag('technologies', 'max')
+          } catch {}
         }
       },
     ],

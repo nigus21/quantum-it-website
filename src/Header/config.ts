@@ -17,8 +17,37 @@ export const Header: GlobalConfig = {
         link({
           appearances: false,
         }),
+        {
+          name: 'enableDropdown',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            description: 'Enable a dropdown menu under this navigation item',
+          },
+        },
+        {
+          name: 'dropdownItems',
+          type: 'array',
+          admin: {
+            condition: (_, siblingData) => Boolean(siblingData?.enableDropdown),
+            description: 'Sub-items for this dropdown menu',
+            initCollapsed: true,
+          },
+          fields: [
+            link({
+              appearances: false,
+            }),
+            {
+              name: 'description',
+              type: 'text',
+              admin: {
+                description: 'Short explanatory note (optional)',
+              },
+            },
+          ],
+        },
       ],
-      maxRows: 6,
+      maxRows: 8,
       admin: {
         initCollapsed: true,
         components: {

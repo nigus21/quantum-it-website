@@ -77,6 +77,8 @@ export interface Config {
     testimonials: Testimonial;
     awards: Award;
     services: Service;
+    projects: Project;
+    'training-programs': TrainingProgram;
     'case-studies': CaseStudy;
     'legal-pages': LegalPage;
     demos: Demo;
@@ -109,6 +111,8 @@ export interface Config {
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     awards: AwardsSelect<false> | AwardsSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    'training-programs': TrainingProgramsSelect<false> | TrainingProgramsSelect<true>;
     'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
     'legal-pages': LegalPagesSelect<false> | LegalPagesSelect<true>;
     demos: DemosSelect<false> | DemosSelect<true>;
@@ -199,7 +203,7 @@ export interface Page {
     } | null;
     links?:
       | {
-          link: {
+          link?: {
             type?: ('reference' | 'custom') | null;
             newTab?: boolean | null;
             reference?:
@@ -224,7 +228,7 @@ export interface Page {
                   value: number | LegalPage;
                 } | null);
             url?: string | null;
-            label: string;
+            label?: string | null;
             /**
              * Choose how the link should be rendered.
              */
@@ -233,6 +237,9 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
+    /**
+     * Optional background image or graphic
+     */
     media?: (number | null) | Media;
   };
   layout: (
@@ -245,6 +252,13 @@ export interface Page {
     | LogoBannerBlock
     | StatsBlock
     | AwardsListBlock
+    | PillarsBlock
+    | WhyQuantumBlock
+    | FeaturedProjectsBlock
+    | ProcessStepsBlock
+    | ServiceModulesBlock
+    | ExamAreasBlock
+    | ConsultationFormBlock
   )[];
   meta?: {
     title?: string | null;
@@ -491,6 +505,10 @@ export interface Service {
   id: number;
   title: string;
   /**
+   * Capability pillar this service belongs to
+   */
+  pillar?: ('digital-business' | 'enterprise-it' | 'green-smart' | 'professional-development') | null;
+  /**
    * Short elevator pitch for the service
    */
   summary: string;
@@ -640,7 +658,7 @@ export interface CaseStudy {
 export interface Customer {
   id: number;
   name: string;
-  logo: number | Media;
+  logo?: (number | null) | Media;
   /**
    * Client or partner website URL
    */
@@ -712,7 +730,7 @@ export interface CallToActionBlock {
   } | null;
   links?:
     | {
-        link: {
+        link?: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
           reference?:
@@ -737,7 +755,7 @@ export interface CallToActionBlock {
                 value: number | LegalPage;
               } | null);
           url?: string | null;
-          label: string;
+          label?: string | null;
           /**
            * Choose how the link should be rendered.
            */
@@ -799,7 +817,7 @@ export interface ContentBlock {
                 value: number | LegalPage;
               } | null);
           url?: string | null;
-          label: string;
+          label?: string | null;
           /**
            * Choose how the link should be rendered.
            */
@@ -1200,12 +1218,328 @@ export interface AwardsListBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PillarsBlock".
+ */
+export interface PillarsBlock {
+  /**
+   * Small badge above heading (e.g. FOUR CAPABILITY PILLARS)
+   */
+  tagline?: string | null;
+  heading: string;
+  /**
+   * Introductory explanation
+   */
+  description?: string | null;
+  pillars: {
+    title: string;
+    description: string;
+    icon?: ('software' | 'network' | 'security' | 'energy' | 'training') | null;
+    /**
+     * Bullet items or included capabilities
+     */
+    items?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Link to explore this pillar
+     */
+    cta?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null)
+        | ({
+            relationTo: 'services';
+            value: number | Service;
+          } | null)
+        | ({
+            relationTo: 'case-studies';
+            value: number | CaseStudy;
+          } | null)
+        | ({
+            relationTo: 'legal-pages';
+            value: number | LegalPage;
+          } | null);
+      url?: string | null;
+      label?: string | null;
+    };
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'pillars';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhyQuantumBlock".
+ */
+export interface WhyQuantumBlock {
+  /**
+   * e.g. WHY QUANTUM or OUR VALUES
+   */
+  tagline?: string | null;
+  heading: string;
+  description?: string | null;
+  items: {
+    title: string;
+    description: string;
+    icon?:
+      | ('layers' | 'globe' | 'shield' | 'lifecycle' | 'innovation' | 'excellence' | 'sustainability' | 'integrity')
+      | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'whyQuantum';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturedProjectsBlock".
+ */
+export interface FeaturedProjectsBlock {
+  /**
+   * e.g. FEATURED PROJECTS or PROVEN IN COMPLEX ENVIRONMENTS
+   */
+  tagline?: string | null;
+  heading: string;
+  description?: string | null;
+  /**
+   * Show interactive category filter pills (Government, Financial, Enterprise, Energy, Security)
+   */
+  showCategoryFilter?: boolean | null;
+  /**
+   * Only display projects marked as featured (ideal for Homepage)
+   */
+  featuredOnly?: boolean | null;
+  /**
+   * Maximum number of projects to display
+   */
+  limit?: number | null;
+  /**
+   * Bottom action link (e.g. View All Projects)
+   */
+  cta?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'services';
+          value: number | Service;
+        } | null)
+      | ({
+          relationTo: 'case-studies';
+          value: number | CaseStudy;
+        } | null)
+      | ({
+          relationTo: 'legal-pages';
+          value: number | LegalPage;
+        } | null);
+    url?: string | null;
+    label?: string | null;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'featuredProjects';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProcessStepsBlock".
+ */
+export interface ProcessStepsBlock {
+  /**
+   * Badge above title (e.g. OUR APPROACH or THE SEVEN STEPS)
+   */
+  tagline?: string | null;
+  heading: string;
+  description?: string | null;
+  steps: {
+    /**
+     * e.g. 01, 02 or Step 1
+     */
+    stepNumber: string;
+    title: string;
+    description: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'processSteps';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServiceModulesBlock".
+ */
+export interface ServiceModulesBlock {
+  /**
+   * Anchor ID for internal links (e.g. erp, biometric-attendance, e-invoicing)
+   */
+  sectionId?: string | null;
+  /**
+   * e.g. SUBCATEGORY 1 · ERP or WHAT WE DELIVER
+   */
+  badge?: string | null;
+  title: string;
+  /**
+   * Tagline or value statement (e.g. One platform. Every critical function. Complete visibility.)
+   */
+  subtitle?: string | null;
+  description?: string | null;
+  modules: {
+    title: string;
+    description?: string | null;
+    id?: string | null;
+  }[];
+  /**
+   * e.g. Deployed across multiple Customs branch locations.
+   */
+  proofPoint?: string | null;
+  /**
+   * e.g. Built for: enterprises, SMEs, SACCOs and institutions with complex operations.
+   */
+  targetAudience?: string | null;
+  /**
+   * Action button (e.g. Request an ERP Demo)
+   */
+  cta?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'services';
+          value: number | Service;
+        } | null)
+      | ({
+          relationTo: 'case-studies';
+          value: number | CaseStudy;
+        } | null)
+      | ({
+          relationTo: 'legal-pages';
+          value: number | LegalPage;
+        } | null);
+    url?: string | null;
+    label?: string | null;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'serviceModules';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ExamAreasBlock".
+ */
+export interface ExamAreasBlock {
+  tagline?: string | null;
+  heading: string;
+  description?: string | null;
+  areas: {
+    title: string;
+    description: string;
+    badge?: string | null;
+    id?: string | null;
+  }[];
+  commitmentHeading?: string | null;
+  commitmentText?: string | null;
+  /**
+   * Register interest link
+   */
+  cta?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'services';
+          value: number | Service;
+        } | null)
+      | ({
+          relationTo: 'case-studies';
+          value: number | CaseStudy;
+        } | null)
+      | ({
+          relationTo: 'legal-pages';
+          value: number | LegalPage;
+        } | null);
+    url?: string | null;
+    label?: string | null;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'examAreas';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ConsultationFormBlock".
+ */
+export interface ConsultationFormBlock {
+  formMode: 'consultation' | 'contact';
+  /**
+   * Badge above title
+   */
+  tagline?: string | null;
+  heading: string;
+  description?: string | null;
+  /**
+   * Display the 3-step process (1. You Tell Us, 2. We Review, 3. We Recommend)
+   */
+  showNextSteps?: boolean | null;
+  successMessage?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'consultationForm';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "technologies".
  */
 export interface Technology {
   id: number;
   name: string;
-  logo: number | Media;
+  logo?: (number | null) | Media;
   website?: string | null;
   category?: ('partner' | 'framework' | 'platform' | 'tool') | null;
   /**
@@ -1278,6 +1612,89 @@ export interface Award {
   /**
    * Lower numbers appear first within the same year
    */
+  sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  /**
+   * Client name (e.g. Customs, Dashen Bank, Ethiopian Electric Utility)
+   */
+  client: string;
+  category: 'government' | 'financial' | 'enterprise' | 'energy' | 'security';
+  /**
+   * Solution delivered (e.g. Biometric Attendance & Workforce Management, EV Charging Infrastructure)
+   */
+  solution: string;
+  /**
+   * Overview of the project engagement and scope
+   */
+  summary: string;
+  /**
+   * Core focus area (e.g. Enterprise communication and collaboration)
+   */
+  focus?: string | null;
+  /**
+   * Measurable outcome or metric (e.g. 24 EV chargers installed at Kotebe site)
+   */
+  result?: string | null;
+  /**
+   * Project visual or diagram
+   */
+  image?: (number | null) | Media;
+  /**
+   * Show on homepage featured projects
+   */
+  featured?: boolean | null;
+  /**
+   * Display order (lower numbers appear first)
+   */
+  sortOrder?: number | null;
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "training-programs".
+ */
+export interface TrainingProgram {
+  id: number;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  track: 'oracle' | 'microsoft' | 'cybersecurity' | 'project-management' | 'corporate';
+  level?: ('beginner' | 'intermediate' | 'advanced' | 'certification-prep') | null;
+  /**
+   * e.g. 40 Hours · 4 Weeks
+   */
+  duration?: string | null;
+  description: string;
+  /**
+   * Who this course is for (e.g. IT Managers, Security Analysts)
+   */
+  targetAudience?: string | null;
+  topics?:
+    | {
+        topic: string;
+        id?: string | null;
+      }[]
+    | null;
+  featured?: boolean | null;
   sortOrder?: number | null;
   updatedAt: string;
   createdAt: string;
@@ -1574,6 +1991,14 @@ export interface PayloadLockedDocument {
         value: number | Service;
       } | null)
     | ({
+        relationTo: 'projects';
+        value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'training-programs';
+        value: number | TrainingProgram;
+      } | null)
+    | ({
         relationTo: 'case-studies';
         value: number | CaseStudy;
       } | null)
@@ -1695,6 +2120,13 @@ export interface PagesSelect<T extends boolean = true> {
         logoBanner?: T | LogoBannerBlockSelect<T>;
         stats?: T | StatsBlockSelect<T>;
         awardsList?: T | AwardsListBlockSelect<T>;
+        pillars?: T | PillarsBlockSelect<T>;
+        whyQuantum?: T | WhyQuantumBlockSelect<T>;
+        featuredProjects?: T | FeaturedProjectsBlockSelect<T>;
+        processSteps?: T | ProcessStepsBlockSelect<T>;
+        serviceModules?: T | ServiceModulesBlockSelect<T>;
+        examAreas?: T | ExamAreasBlockSelect<T>;
+        consultationForm?: T | ConsultationFormBlockSelect<T>;
       };
   meta?:
     | T
@@ -1836,6 +2268,179 @@ export interface StatsBlockSelect<T extends boolean = true> {
 export interface AwardsListBlockSelect<T extends boolean = true> {
   heading?: T;
   limit?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PillarsBlock_select".
+ */
+export interface PillarsBlockSelect<T extends boolean = true> {
+  tagline?: T;
+  heading?: T;
+  description?: T;
+  pillars?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        items?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        cta?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhyQuantumBlock_select".
+ */
+export interface WhyQuantumBlockSelect<T extends boolean = true> {
+  tagline?: T;
+  heading?: T;
+  description?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturedProjectsBlock_select".
+ */
+export interface FeaturedProjectsBlockSelect<T extends boolean = true> {
+  tagline?: T;
+  heading?: T;
+  description?: T;
+  showCategoryFilter?: T;
+  featuredOnly?: T;
+  limit?: T;
+  cta?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProcessStepsBlock_select".
+ */
+export interface ProcessStepsBlockSelect<T extends boolean = true> {
+  tagline?: T;
+  heading?: T;
+  description?: T;
+  steps?:
+    | T
+    | {
+        stepNumber?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServiceModulesBlock_select".
+ */
+export interface ServiceModulesBlockSelect<T extends boolean = true> {
+  sectionId?: T;
+  badge?: T;
+  title?: T;
+  subtitle?: T;
+  description?: T;
+  modules?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  proofPoint?: T;
+  targetAudience?: T;
+  cta?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ExamAreasBlock_select".
+ */
+export interface ExamAreasBlockSelect<T extends boolean = true> {
+  tagline?: T;
+  heading?: T;
+  description?: T;
+  areas?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        badge?: T;
+        id?: T;
+      };
+  commitmentHeading?: T;
+  commitmentText?: T;
+  cta?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ConsultationFormBlock_select".
+ */
+export interface ConsultationFormBlockSelect<T extends boolean = true> {
+  formMode?: T;
+  tagline?: T;
+  heading?: T;
+  description?: T;
+  showNextSteps?: T;
+  successMessage?: T;
   id?: T;
   blockName?: T;
 }
@@ -2066,6 +2671,7 @@ export interface AwardsSelect<T extends boolean = true> {
  */
 export interface ServicesSelect<T extends boolean = true> {
   title?: T;
+  pillar?: T;
   summary?: T;
   icon?: T;
   coverImage?: T;
@@ -2092,6 +2698,51 @@ export interface ServicesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  client?: T;
+  category?: T;
+  solution?: T;
+  summary?: T;
+  focus?: T;
+  result?: T;
+  image?: T;
+  featured?: T;
+  sortOrder?: T;
+  publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "training-programs_select".
+ */
+export interface TrainingProgramsSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  track?: T;
+  level?: T;
+  duration?: T;
+  description?: T;
+  targetAudience?: T;
+  topics?:
+    | T
+    | {
+        topic?: T;
+        id?: T;
+      };
+  featured?: T;
+  sortOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2489,7 +3140,7 @@ export interface Header {
   id: number;
   navItems?:
     | {
-        link: {
+        link?: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
           reference?:
@@ -2514,8 +3165,51 @@ export interface Header {
                 value: number | LegalPage;
               } | null);
           url?: string | null;
-          label: string;
+          label?: string | null;
         };
+        /**
+         * Enable a dropdown menu under this navigation item
+         */
+        enableDropdown?: boolean | null;
+        /**
+         * Sub-items for this dropdown menu
+         */
+        dropdownItems?:
+          | {
+              link?: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null)
+                  | ({
+                      relationTo: 'services';
+                      value: number | Service;
+                    } | null)
+                  | ({
+                      relationTo: 'case-studies';
+                      value: number | CaseStudy;
+                    } | null)
+                  | ({
+                      relationTo: 'legal-pages';
+                      value: number | LegalPage;
+                    } | null);
+                url?: string | null;
+                label?: string | null;
+              };
+              /**
+               * Short explanatory note (optional)
+               */
+              description?: string | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -2524,7 +3218,7 @@ export interface Header {
    */
   ctaButtons?:
     | {
-        link: {
+        link?: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
           reference?:
@@ -2549,7 +3243,7 @@ export interface Header {
                 value: number | LegalPage;
               } | null);
           url?: string | null;
-          label: string;
+          label?: string | null;
           /**
            * Choose how the link should be rendered.
            */
@@ -2578,7 +3272,7 @@ export interface Footer {
         heading: string;
         links?:
           | {
-              link: {
+              link?: {
                 type?: ('reference' | 'custom') | null;
                 newTab?: boolean | null;
                 reference?:
@@ -2603,7 +3297,7 @@ export interface Footer {
                       value: number | LegalPage;
                     } | null);
                 url?: string | null;
-                label: string;
+                label?: string | null;
               };
               id?: string | null;
             }[]
@@ -2655,8 +3349,24 @@ export interface SiteSetting {
    * Google Analytics / Plausible / etc. ID
    */
   analyticsId?: string | null;
+  /**
+   * Tagline or brand slogan
+   */
+  brandLine?: string | null;
   contactEmail?: string | null;
+  /**
+   * Additional contact or marketing email
+   */
+  secondaryEmail?: string | null;
   contactPhone?: string | null;
+  /**
+   * Alternate phone number
+   */
+  secondaryPhone?: string | null;
+  /**
+   * e.g. Mon-Fri 8:30 AM - 5:30 PM, Sat 8:30 AM - 1:00 PM
+   */
+  businessHours?: string | null;
   address?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -2677,6 +3387,22 @@ export interface HeaderSelect<T extends boolean = true> {
               reference?: T;
               url?: T;
               label?: T;
+            };
+        enableDropdown?: T;
+        dropdownItems?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              description?: T;
+              id?: T;
             };
         id?: T;
       };
@@ -2753,8 +3479,12 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         id?: T;
       };
   analyticsId?: T;
+  brandLine?: T;
   contactEmail?: T;
+  secondaryEmail?: T;
   contactPhone?: T;
+  secondaryPhone?: T;
+  businessHours?: T;
   address?: T;
   updatedAt?: T;
   createdAt?: T;

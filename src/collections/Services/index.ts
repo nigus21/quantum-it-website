@@ -79,6 +79,19 @@ export const Services: CollectionConfig<'services'> = {
           label: 'Content',
           fields: [
             {
+              name: 'pillar',
+              type: 'select',
+              options: [
+                { label: 'Digital Business Solutions', value: 'digital-business' },
+                { label: 'Enterprise IT & Cybersecurity', value: 'enterprise-it' },
+                { label: 'Green & Smart Infrastructure', value: 'green-smart' },
+                { label: 'Professional Development', value: 'professional-development' },
+              ],
+              admin: {
+                description: 'Capability pillar this service belongs to',
+              },
+            },
+            {
               name: 'summary',
               type: 'textarea',
               required: true,

@@ -1,4 +1,4 @@
-import PageTemplate, { generateMetadata as generateSlugMetadata } from './[slug]/page'
+import PageTemplate, { generateMetadata as generateSlugMetadata } from './[...slug]/page'
 
 type Args = {
   params: Promise<{ locale: string }>

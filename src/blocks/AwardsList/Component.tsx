@@ -32,18 +32,18 @@ export const AwardsListBlockComponent: React.FC<AwardsListBlock> = async ({
   const byYear = groupAwardsByYear(awards)
 
   return (
-    <section className="container">
+    <section className="container py-12 md:py-16">
       {heading && (
-        <h2 className="mb-6 text-center text-lg font-semibold text-muted-foreground">
+        <h2 className="mb-8 text-center text-2xl md:text-3xl font-bold text-slate-900">
           {heading}
         </h2>
       )}
-      <div className="flex flex-col gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {[...byYear.entries()].map(([year, items]) => (
-          <div key={year}>
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-foreground">
+          <div key={year} className="p-6 md:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.04)]">
+            <span className="inline-block px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200/80 mb-5">
               {year}
-            </h3>
+            </span>
             <ul className="flex flex-col gap-2">
               {items.map((award) => {
                 const image =
@@ -60,22 +60,22 @@ export const AwardsListBlockComponent: React.FC<AwardsListBlock> = async ({
                 return (
                   <li
                     key={award.id}
-                    className="flex items-center gap-3 border-b border-border pb-2 last:border-0"
+                    className="flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0"
                   >
                     {image && (
                       <img
                         src={image}
                         alt=""
-                        className="h-8 w-8 shrink-0 object-contain"
+                        className="h-10 w-10 shrink-0 object-contain p-1 rounded-lg bg-slate-50 border border-slate-100"
                       />
                     )}
-                    <span className="min-w-0 flex-1 text-sm">{line}</span>
+                    <span className="min-w-0 flex-1 text-sm font-medium text-slate-800">{line}</span>
                     {award.link && (
                       <a
                         href={award.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
+                        className="shrink-0 text-slate-400 hover:text-emerald-600 transition-colors p-1"
                         aria-label="View award"
                       >
                         <svg

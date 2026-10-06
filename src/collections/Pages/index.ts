@@ -11,6 +11,13 @@ import { LogoBanner } from '../../blocks/LogoBanner/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { Stats } from '../../blocks/Stats/config'
 import { Testimonial } from '../../blocks/Testimonial/config'
+import { Pillars } from '../../blocks/Pillars/config'
+import { WhyQuantum } from '../../blocks/WhyQuantum/config'
+import { FeaturedProjects } from '../../blocks/FeaturedProjects/config'
+import { ProcessSteps } from '../../blocks/ProcessSteps/config'
+import { ServiceModules } from '../../blocks/ServiceModules/config'
+import { ExamAreas } from '../../blocks/ExamAreas/config'
+import { ConsultationForm } from '../../blocks/ConsultationForm/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -69,7 +76,7 @@ export const Pages: CollectionConfig<'pages'> = {
       type: 'tabs',
       tabs: [
         {
-          fields: [{ ...hero, name: 'hero', localized: true }],
+          fields: [hero],
           label: 'Hero',
         },
         {
@@ -87,12 +94,125 @@ export const Pages: CollectionConfig<'pages'> = {
                 LogoBanner,
                 Stats,
                 AwardsList,
+                Pillars,
+                WhyQuantum,
+                FeaturedProjects,
+                ProcessSteps,
+                ServiceModules,
+                ExamAreas,
+                ConsultationForm,
               ],
               required: true,
               localized: true,
               admin: {
                 initCollapsed: true,
               },
+              defaultValue: [
+                {
+                  blockType: 'content',
+                  blockName: 'Page Introduction',
+                  columns: [
+                    {
+                      size: 'full',
+                      richText: {
+                        root: {
+                          type: 'root',
+                          children: [
+                            {
+                              type: 'heading',
+                              tag: 'h2',
+                              children: [
+                                {
+                                  type: 'text',
+                                  text: 'Overview & Objectives',
+                                  version: 1,
+                                },
+                              ],
+                              direction: 'ltr',
+                              format: '',
+                              indent: 0,
+                              version: 1,
+                            },
+                            {
+                              type: 'paragraph',
+                              children: [
+                                {
+                                  type: 'text',
+                                  text: 'Welcome to this section. Quantum IT & Security Solutions PLC delivers world-class enterprise technology, software engineering, and mission-critical cybersecurity. You can edit or delete this block as needed.',
+                                  version: 1,
+                                },
+                              ],
+                              direction: 'ltr',
+                              format: '',
+                              indent: 0,
+                              version: 1,
+                            },
+                          ],
+                          direction: 'ltr',
+                          format: '',
+                          indent: 0,
+                          version: 1,
+                        },
+                      },
+                      enableLink: false,
+                    },
+                  ],
+                },
+                {
+                  blockType: 'cta',
+                  blockName: 'Call to Action',
+                  richText: {
+                    root: {
+                      type: 'root',
+                      children: [
+                        {
+                          type: 'heading',
+                          tag: 'h2',
+                          children: [
+                            {
+                              type: 'text',
+                              text: 'Ready to elevate your IT and security infrastructure?',
+                              version: 1,
+                            },
+                          ],
+                          direction: 'ltr',
+                          format: '',
+                          indent: 0,
+                          version: 1,
+                        },
+                        {
+                          type: 'paragraph',
+                          children: [
+                            {
+                              type: 'text',
+                              text: 'Contact Quantum IT & Security Solutions today to discuss your enterprise requirements.',
+                              version: 1,
+                            },
+                          ],
+                          direction: 'ltr',
+                          format: '',
+                          indent: 0,
+                          version: 1,
+                        },
+                      ],
+                      direction: 'ltr',
+                      format: '',
+                      indent: 0,
+                      version: 1,
+                    },
+                  },
+                  links: [
+                    {
+                      link: {
+                        type: 'custom',
+                        url: '/contact',
+                        label: 'Contact Us',
+                        appearance: 'default',
+                      },
+                    },
+                  ],
+                },
+              ],
             },
           ],
           label: 'Content',

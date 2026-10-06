@@ -27,7 +27,7 @@ export const Customers: CollectionConfig = {
       name: 'logo',
       type: 'upload',
       relationTo: 'media',
-      required: true,
+      required: false,
     },
     {
       name: 'website',
@@ -57,14 +57,18 @@ export const Customers: CollectionConfig = {
     afterChange: [
       ({ req: { context } }) => {
         if (!context?.disableRevalidate) {
-          revalidateTag('customers', 'max')
+          try {
+            revalidateTag('customers', 'max')
+          } catch {}
         }
       },
     ],
     afterDelete: [
       ({ req: { context } }) => {
         if (!context?.disableRevalidate) {
-          revalidateTag('customers', 'max')
+          try {
+            revalidateTag('customers', 'max')
+          } catch {}
         }
       },
     ],

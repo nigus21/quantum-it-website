@@ -7,7 +7,6 @@ import React, { useEffect, useState } from 'react'
 import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
-import { LocaleSwitcher } from '@/components/LocaleSwitcher'
 import { HeaderNav } from './Nav'
 import { prefixWithLocale, useLocale } from '@/i18n/locale'
 import type { Locale } from '@/i18n/config'
@@ -35,14 +34,16 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-8 flex justify-between">
-        <Link href={prefixWithLocale('/', locale)}>
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+    <header
+      className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/90 backdrop-blur-md shadow-[0_2px_15px_-3px_rgba(0,0,0,0.03)] transition-all duration-200"
+      {...(theme ? { 'data-theme': theme } : {})}
+    >
+      <div className="container py-3.5 flex items-center justify-between">
+        <Link href={prefixWithLocale('/', locale)} className="flex items-center">
+          <Logo loading="eager" priority="high" />
         </Link>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 lg:gap-6">
           <HeaderNav data={data} locale={locale} />
-          <LocaleSwitcher currentLocale={locale} className="ml-2" />
         </div>
       </div>
     </header>

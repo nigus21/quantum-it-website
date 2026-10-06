@@ -4,6 +4,7 @@ import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
 import { draftMode } from 'next/headers'
+import { connection } from 'next/server'
 import React, { cache } from 'react'
 import { homeStatic } from '@/endpoints/seed/home-static'
 
@@ -15,14 +16,14 @@ import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 type Args = {
-  params: Promise<{ locale: string; slug?: string }>
+  params: Promise<{ locale: string; slug?: string | string[] }>
 }
 
 export async function generateStaticParams() {
   try {
     const payload = await getPayload({ config: configPromise })
     const locales: Locale[] = ['en', 'bg']
-    const allParams: { locale: string; slug: string }[] = []
+    const allParams: { locale: string; slug: string[] }[] = []
 
     for (const locale of locales) {
       const pages = await payload.find({
@@ -38,35 +39,39 @@ export async function generateStaticParams() {
       const slugs =
         pages.docs
           ?.filter((doc) => doc.slug !== 'home')
-          .map((doc) => ({ locale, slug: doc.slug as string })) ?? []
+          .map((doc) => ({
+            locale,
+            slug: (doc.slug as string).split('/').filter(Boolean),
+          })) ?? []
       allParams.push(...slugs)
     }
 
-    // Next.js 16 Cache Components require at least one param for build-time validation
     if (allParams.length === 0) {
-      return [{ locale: 'en', slug: 'home' }]
+      return [{ locale: 'en', slug: ['home'] }]
     }
     return allParams
   } catch {
-    return [{ locale: 'en', slug: 'home' }]
+    return [{ locale: 'en', slug: ['home'] }]
   }
 }
 
 export default async function Page({ params: paramsPromise }: Args) {
+  await connection()
   const { isEnabled: draft } = await draftMode()
-  const { locale: localeParam, slug = 'home' } = await paramsPromise
+  const { locale: localeParam, slug: rawSlug = 'home' } = await paramsPromise
   const locale = isValidLocale(localeParam) ? localeParam : 'en'
-  const decodedSlug = decodeURIComponent(slug)
-  const path = slug === 'home' ? '/' : `/${decodedSlug}`
-  const url = getLocalizedPath(locale, path)
-  let page: RequiredDataFromCollectionSlug<'pages'> | null
 
-  page = await queryPageBySlug({
-    slug: decodedSlug,
+  const slugArray = Array.isArray(rawSlug) ? rawSlug : [rawSlug]
+  const fullSlug = slugArray.map(decodeURIComponent).join('/')
+  const path = fullSlug === 'home' ? '/' : `/${fullSlug}`
+  const url = getLocalizedPath(locale, path)
+
+  let page: RequiredDataFromCollectionSlug<'pages'> | null = await queryPageBySlug({
+    slugArray,
     locale,
   })
 
-  if (!page && slug === 'home') {
+  if (!page && fullSlug === 'home') {
     page = homeStatic
   }
 
@@ -77,7 +82,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { hero, layout } = page
 
   return (
-    <article className="pt-16 pb-24">
+    <article>
       <PageClient />
       <PayloadRedirects disableNotFound url={url} />
       {draft && <LivePreviewListener />}
@@ -88,11 +93,13 @@ export default async function Page({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { locale: localeParam, slug = 'home' } = await paramsPromise
+  await connection()
+  const { locale: localeParam, slug: rawSlug = 'home' } = await paramsPromise
   const locale = isValidLocale(localeParam) ? localeParam : 'en'
-  const decodedSlug = decodeURIComponent(slug)
+
+  const slugArray = Array.isArray(rawSlug) ? rawSlug : [rawSlug]
   const page = await queryPageBySlug({
-    slug: decodedSlug,
+    slugArray,
     locale,
   })
 
@@ -100,10 +107,14 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 }
 
 const queryPageBySlug = cache(
-  async ({ slug, locale }: { slug: string; locale: Locale }) => {
+  async ({ slugArray, locale }: { slugArray: string[]; locale: Locale }) => {
     const { isEnabled: draft } = await draftMode()
-
     const payload = await getPayload({ config: configPromise })
+
+    const fullSlug = slugArray.map(decodeURIComponent).join('/')
+    const lastSlug = slugArray[slugArray.length - 1]
+      ? decodeURIComponent(slugArray[slugArray.length - 1])
+      : fullSlug
 
     const result = await payload.find({
       collection: 'pages',
@@ -113,9 +124,18 @@ const queryPageBySlug = cache(
       pagination: false,
       overrideAccess: draft,
       where: {
-        slug: {
-          equals: slug,
-        },
+        or: [
+          {
+            slug: {
+              equals: fullSlug,
+            },
+          },
+          {
+            slug: {
+              equals: lastSlug,
+            },
+          },
+        ],
       },
     })
 

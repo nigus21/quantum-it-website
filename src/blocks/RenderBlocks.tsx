@@ -11,6 +11,13 @@ import { LogoBannerBlockComponent } from '@/blocks/LogoBanner/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { StatsBlockComponent } from '@/blocks/Stats/Component'
 import { TestimonialBlockComponent } from '@/blocks/Testimonial/Component'
+import { PillarsBlockComponent } from '@/blocks/Pillars/Component'
+import { WhyQuantumBlockComponent } from '@/blocks/WhyQuantum/Component'
+import { FeaturedProjectsBlockComponent } from '@/blocks/FeaturedProjects/Component'
+import { ProcessStepsBlockComponent } from '@/blocks/ProcessSteps/Component'
+import { ServiceModulesBlockComponent } from '@/blocks/ServiceModules/Component'
+import { ExamAreasBlockComponent } from '@/blocks/ExamAreas/Component'
+import { ConsultationFormBlockComponent } from '@/blocks/ConsultationForm/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -22,6 +29,13 @@ const blockComponents = {
   mediaBlock: MediaBlock,
   stats: StatsBlockComponent,
   testimonial: TestimonialBlockComponent,
+  pillars: PillarsBlockComponent,
+  whyQuantum: WhyQuantumBlockComponent,
+  featuredProjects: FeaturedProjectsBlockComponent,
+  processSteps: ProcessStepsBlockComponent,
+  serviceModules: ServiceModulesBlockComponent,
+  examAreas: ExamAreasBlockComponent,
+  consultationForm: ConsultationFormBlockComponent,
 }
 
 export const RenderBlocks: React.FC<{

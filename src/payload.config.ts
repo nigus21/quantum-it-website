@@ -13,6 +13,8 @@ import { Customers } from './collections/Customers'
 import { Demos } from './collections/Demos'
 import { LegalPages } from './collections/LegalPages'
 import { Portfolio } from './collections/Portfolio'
+import { Projects } from './collections/Projects'
+import { TrainingPrograms } from './collections/TrainingPrograms'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
@@ -103,6 +105,8 @@ export default buildConfig({
     Testimonials,
     Awards,
     Services,
+    Projects,
+    TrainingPrograms,
     CaseStudies,
     LegalPages,
     Demos,
