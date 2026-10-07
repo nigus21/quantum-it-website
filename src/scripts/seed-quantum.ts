@@ -736,6 +736,29 @@ async function seed() {
     },
     layout: [
       {
+        blockType: 'whyQuantum',
+        tagline: '',
+        heading: 'Start With Your Business Goal',
+        description: 'Choose the challenge your organization is facing today:',
+        items: [
+          {
+            title: '“We need to digitize our operations.”',
+            description: 'Automate manual registers, finance and member services with our ERP, Biometric Attendance, and E-Invoicing platforms.',
+            icon: 'innovation',
+          },
+          {
+            title: '“We need a faster, safer, more resilient IT environment.”',
+            description: 'Upgrade your LAN/WAN, servers, cloud backup and defend against ransomware and data breaches with our IT & Security team.',
+            icon: 'shield',
+          },
+          {
+            title: '“We need dependable, lower-cost power.”',
+            description: 'Eliminate downtime and generator dependency with commercial solar and prepare for electric mobility with EV charging.',
+            icon: 'sustainability',
+          },
+        ],
+      },
+      {
         blockType: 'pillars',
         tagline: 'CAPABILITY ARCHITECTURE',
         heading: 'Integrated Systems for Resilient Enterprise',
@@ -804,29 +827,6 @@ async function seed() {
               url: '/training',
               label: 'Explore Professional Training',
             },
-          },
-        ],
-      },
-      {
-        blockType: 'whyQuantum',
-        tagline: 'NOT SURE WHERE TO START?',
-        heading: 'Start With Your Business Goal',
-        description: 'Choose the challenge your organization is facing today:',
-        items: [
-          {
-            title: '“We need to digitize our operations.”',
-            description: 'Automate manual registers, finance and member services with our ERP, Biometric Attendance, and E-Invoicing platforms.',
-            icon: 'innovation',
-          },
-          {
-            title: '“We need a faster, safer, more resilient IT environment.”',
-            description: 'Upgrade your LAN/WAN, servers, cloud backup and defend against ransomware and data breaches with our IT & Security team.',
-            icon: 'shield',
-          },
-          {
-            title: '“We need dependable, lower-cost power.”',
-            description: 'Eliminate downtime and generator dependency with commercial solar and prepare for electric mobility with EV charging.',
-            icon: 'sustainability',
           },
         ],
       },
@@ -1811,24 +1811,39 @@ async function seed() {
     layout: [
       {
         blockType: 'whyQuantum',
+        layoutStyle: 'editorial',
         tagline: 'WHO WE ARE',
         heading: 'Delivering Comprehensive Technology Under One Roof',
         description: 'Quantum IT & Security Solutions PLC combines software development, ICT infrastructure, cybersecurity, cloud technologies, digital services, professional training and green energy solutions.',
         items: [
           {
-            title: 'Our Vision',
-            description: 'To become a trusted technology and digital transformation partner in Ethiopia and the East African region.',
-            icon: 'globe',
-          },
-          {
             title: 'Our Mission',
-            description: 'To deliver innovative, secure and sustainable technology solutions that help organizations improve productivity, strengthen resilience and achieve sustainable growth.',
+            badge: 'PURPOSE & CONSCIENCE',
+            description: "There's a common notion that technology delivery in emerging markets is transactional and fragmented. But we know there's a better way to build. One where what's good for long-term operational resilience is also good for sustainable institutional growth.\n\nWe believe Ethiopian organizations succeed when technology operates with integrity, security by design, and end-to-end accountability. That's why we've built an integrated ecosystem uniting enterprise software, secure networks, and green solar power to help businesses grow better every day.",
+            pullquote: 'We believe businesses can grow with a conscience, and succeed with a soul — powered by dependable technology.',
+            authorName: 'Engineering Leadership & Co-Founders',
+            authorRole: 'Quantum IT & Security Solutions PLC',
+            imagePosition: 'right',
             icon: 'excellence',
           },
           {
-            title: 'Headquarters & Presence',
-            description: 'Headquartered in Addis Ababa, Ethiopia, serving clients nationwide with dedicated technical specialists.',
-            icon: 'layers',
+            title: 'Our Story',
+            badge: 'THE JOURNEY & ORIGIN',
+            description: 'Founded in Addis Ababa, Quantum was born from a clear operational reality: public institutions and commercial enterprises across Ethiopia were struggling with disjointed vendors. One provider installed software, another routed cabling, a third handled firewalls, and power outages left everything stranded.\n\nOur founding team of veteran systems architects and software engineers united to solve this fundamental bottleneck. Today, Quantum delivers complete operational technology under one roof—from national bank ERP integrations and Customs biometric attendance to commercial EV charging hubs and off-grid solar power.',
+            pullquote: 'Connecting software, infrastructure, cybersecurity and renewable energy into a single accountable partner.',
+            authorName: 'Addis Ababa Engineering Operations',
+            authorRole: 'Headquarters, Addis Ababa, Ethiopia',
+            imagePosition: 'left',
+            icon: 'innovation',
+          },
+          {
+            title: 'Our Vision',
+            badge: 'REGIONAL IMPACT & FUTURE',
+            description: 'To become the most trusted digital transformation partner across Ethiopia and the East African region. We continuously bridge local operational realities with global Tier-1 engineering standards—ensuring our clients achieve 99.99% system availability, zero vendor lock-in, and lifelong technical support.',
+            authorName: 'Client Success & Technical Governance',
+            authorRole: 'Enterprise Solutions Division',
+            imagePosition: 'right',
+            icon: 'globe',
           },
         ],
       },

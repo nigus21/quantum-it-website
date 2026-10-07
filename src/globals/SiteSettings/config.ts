@@ -108,6 +108,74 @@ export const SiteSettings: GlobalConfig = {
       name: 'address',
       type: 'textarea',
     },
+    {
+      name: 'emailNotifications',
+      type: 'group',
+      label: 'Form & Lead Email Notifications',
+      admin: {
+        description: 'Configure real-time email delivery when visitors submit consultation and contact inquiries on the website.',
+      },
+      fields: [
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          label: 'Send Email Notifications on Form Submission',
+          defaultValue: true,
+        },
+        {
+          name: 'recipientEmails',
+          type: 'text',
+          label: 'Notification Recipient Email(s)',
+          defaultValue: 'henok@quantumitss.com, marketing@quantumitss.com',
+          admin: {
+            description: 'Comma-separated email addresses that will receive instant alerts for new form submissions.',
+          },
+        },
+      ],
+    },
+    {
+      name: 'whatsapp',
+      type: 'group',
+      label: 'WhatsApp Floating Chat Button',
+      admin: {
+        description: 'Configure the floating WhatsApp contact button displayed at the bottom-right corner of the website.',
+      },
+      fields: [
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          label: 'Enable WhatsApp Button',
+          defaultValue: true,
+        },
+        {
+          name: 'phoneNumber',
+          type: 'text',
+          label: 'WhatsApp Phone Number',
+          defaultValue: '+251911234567',
+          admin: {
+            description: 'Full international number with country code (e.g. +251911234567).',
+          },
+        },
+        {
+          name: 'defaultMessage',
+          type: 'text',
+          label: 'Default Message',
+          defaultValue: 'Hello Quantum IT! I would like to inquire about your services and solutions.',
+          admin: {
+            description: 'Pre-filled message when a visitor clicks to start a chat.',
+          },
+        },
+        {
+          name: 'tooltipText',
+          type: 'text',
+          label: 'Button Label / Tooltip',
+          defaultValue: 'Chat on WhatsApp',
+          admin: {
+            description: 'Label shown beside the button or on hover.',
+          },
+        },
+      ],
+    },
   ],
   hooks: {
     afterChange: [revalidateSiteSettings],

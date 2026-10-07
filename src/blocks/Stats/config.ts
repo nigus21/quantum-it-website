@@ -9,8 +9,8 @@ export const Stats: Block = {
       type: 'array',
       required: true,
       admin: {
-        description: 'Metric label and value pairs (e.g. "Projects Delivered", "150+")',
-        initCollapsed: true,
+        description: 'Metric label and value pairs (e.g. "Projects Delivered", "20+")',
+        initCollapsed: false,
       },
       fields: [
         {

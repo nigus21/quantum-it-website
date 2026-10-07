@@ -31,18 +31,12 @@ export const ServiceModulesBlockComponent: React.FC<ServiceModulesBlockProps> = 
   cta,
 }) => {
   return (
-    <section id={sectionId} className="container py-14 md:py-20 scroll-mt-24">
+    <section id={sectionId} className="container py-8 md:py-12 scroll-mt-24">
       <div className="rounded-3xl bg-white border border-slate-200/90 shadow-[0_4px_30px_-4px_rgba(0,0,0,0.05)] p-8 md:p-12 lg:p-16 relative overflow-hidden">
         {/* Subtle background ambient glow */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-3xl mb-12">
-          {badge && (
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 mb-4 rounded-full text-xs font-bold uppercase tracking-widest bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              {badge}
-            </div>
-          )}
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 mb-3">
             {title}
           </h2>

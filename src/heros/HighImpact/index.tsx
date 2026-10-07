@@ -16,7 +16,10 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
   }, [setHeaderTheme])
 
   return (
-    <section className="relative min-h-[65vh] flex items-center justify-center bg-white text-slate-900 overflow-hidden py-10 md:py-16">
+    <section className="relative min-h-[50vh] flex items-center justify-center bg-white text-slate-900 overflow-hidden py-8 md:py-12 border-b border-slate-200/80">
+      {/* Top 1.5px gradient highlight strip */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 z-10" />
+
       {/* High-tech subtle dot grid background */}
       <div className="absolute inset-0 quantum-grid-pattern opacity-80 pointer-events-none" />
 
@@ -70,38 +73,34 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
             </div>
           )}
 
-          {/* Quick Capability Highlights */}
-          <div className="pt-6 border-t border-slate-200/80 grid grid-cols-2 md:grid-cols-4 gap-3 text-left">
-            <div className="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70 hover:border-emerald-400/50 hover:bg-white transition-all duration-200 group">
-              <div className="flex items-center gap-2 mb-1">
-                <Cpu className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-900">ERP & Software</span>
+          {/* Quick Capability Highlights - Clean, borderless with larger icons */}
+          <div className="pt-6 border-t border-slate-200/60 flex flex-wrap items-center justify-center gap-6 md:gap-12">
+            <div className="flex items-center gap-2.5 group cursor-default">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
+                <Cpu className="w-5 h-5 text-emerald-600" />
               </div>
-              <p className="text-xs text-slate-500 leading-tight">Automate operations & e-invoicing</p>
+              <span className="text-xs md:text-sm font-bold tracking-wide text-slate-800 group-hover:text-emerald-700 transition-colors">ERP & Software</span>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70 hover:border-cyan-400/50 hover:bg-white transition-all duration-200 group">
-              <div className="flex items-center gap-2 mb-1">
-                <ShieldCheck className="w-4 h-4 text-cyan-600 group-hover:scale-110 transition-transform" />
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-900">IT & Cybersecurity</span>
+            <div className="flex items-center gap-2.5 group cursor-default">
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-600 group-hover:scale-110 transition-transform">
+                <ShieldCheck className="w-5 h-5 text-cyan-600" />
               </div>
-              <p className="text-xs text-slate-500 leading-tight">Defend networks & cloud data</p>
+              <span className="text-xs md:text-sm font-bold tracking-wide text-slate-800 group-hover:text-cyan-700 transition-colors">IT & Cybersecurity</span>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70 hover:border-amber-400/50 hover:bg-white transition-all duration-200 group">
-              <div className="flex items-center gap-2 mb-1">
-                <SunMedium className="w-4 h-4 text-amber-600 group-hover:scale-110 transition-transform" />
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-900">Commercial Solar</span>
+            <div className="flex items-center gap-2.5 group cursor-default">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-600 group-hover:scale-110 transition-transform">
+                <SunMedium className="w-5 h-5 text-amber-600" />
               </div>
-              <p className="text-xs text-slate-500 leading-tight">Reliable clean power & EV charging</p>
+              <span className="text-xs md:text-sm font-bold tracking-wide text-slate-800 group-hover:text-amber-700 transition-colors">Commercial Solar</span>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-50/80 border border-slate-200/70 hover:border-teal-400/50 hover:bg-white transition-all duration-200 group">
-              <div className="flex items-center gap-2 mb-1">
-                <Award className="w-4 h-4 text-teal-600 group-hover:scale-110 transition-transform" />
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-900">Testing Center</span>
+            <div className="flex items-center gap-2.5 group cursor-default">
+              <div className="w-10 h-10 rounded-xl bg-teal-500/10 flex items-center justify-center text-teal-600 group-hover:scale-110 transition-transform">
+                <Award className="w-5 h-5 text-teal-600" />
               </div>
-              <p className="text-xs text-slate-500 leading-tight">Pearson VUE & IT workforce training</p>
+              <span className="text-xs md:text-sm font-bold tracking-wide text-slate-800 group-hover:text-teal-700 transition-colors">Testing Center</span>
             </div>
           </div>
         </div>

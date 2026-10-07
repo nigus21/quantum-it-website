@@ -68,22 +68,23 @@ export interface Config {
   blocks: {};
   collections: {
     pages: Page;
-    posts: Post;
+    inquiries: Inquiry;
     media: Media;
-    categories: Category;
     customers: Customer;
     technologies: Technology;
+    projects: Project;
+    'training-programs': TrainingProgram;
+    users: User;
+    posts: Post;
+    categories: Category;
     'team-members': TeamMember;
     testimonials: Testimonial;
     awards: Award;
     services: Service;
-    projects: Project;
-    'training-programs': TrainingProgram;
     'case-studies': CaseStudy;
     'legal-pages': LegalPage;
     demos: Demo;
     portfolio: Portfolio;
-    users: User;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -102,22 +103,23 @@ export interface Config {
   };
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
-    posts: PostsSelect<false> | PostsSelect<true>;
+    inquiries: InquiriesSelect<false> | InquiriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    categories: CategoriesSelect<false> | CategoriesSelect<true>;
     customers: CustomersSelect<false> | CustomersSelect<true>;
     technologies: TechnologiesSelect<false> | TechnologiesSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    'training-programs': TrainingProgramsSelect<false> | TrainingProgramsSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
     'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     awards: AwardsSelect<false> | AwardsSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
-    projects: ProjectsSelect<false> | ProjectsSelect<true>;
-    'training-programs': TrainingProgramsSelect<false> | TrainingProgramsSelect<true>;
     'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
     'legal-pages': LegalPagesSelect<false> | LegalPagesSelect<true>;
     demos: DemosSelect<false> | DemosSelect<true>;
     portfolio: PortfolioSelect<false> | PortfolioSelect<true>;
-    users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -459,15 +461,6 @@ export interface Category {
    */
   generateSlug?: boolean | null;
   slug: string;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1185,7 +1178,7 @@ export interface LogoBannerBlock {
  */
 export interface StatsBlock {
   /**
-   * Metric label and value pairs (e.g. "Projects Delivered", "150+")
+   * Metric label and value pairs (e.g. "Projects Delivered", "20+")
    */
   items: {
     label: string;
@@ -1285,14 +1278,39 @@ export interface PillarsBlock {
  */
 export interface WhyQuantumBlock {
   /**
-   * e.g. WHY QUANTUM or OUR VALUES
+   * Choose display layout. Uses Clean Cards by default, Editorial Story for About Us, Zigzag on Home.
+   */
+  layoutStyle?: ('cards' | 'editorial' | 'zigzag' | 'navigator') | null;
+  /**
+   * e.g. WHY QUANTUM or WHO WE ARE
    */
   tagline?: string | null;
   heading: string;
   description?: string | null;
   items: {
     title: string;
+    /**
+     * Section pill badge (e.g. PURPOSE & VALUES, OUR ORIGIN)
+     */
+    badge?: string | null;
     description: string;
+    /**
+     * Optional highlighted quote
+     */
+    pullquote?: string | null;
+    /**
+     * Story image (shown in organic pebble/blob frame)
+     */
+    image?: (number | null) | Media;
+    /**
+     * Author / Leader signature name (e.g. Engineering Leadership & Founders)
+     */
+    authorName?: string | null;
+    /**
+     * Role / Location (e.g. Addis Ababa, Ethiopia)
+     */
+    authorRole?: string | null;
+    imagePosition?: ('right' | 'left') | null;
     icon?:
       | ('layers' | 'globe' | 'shield' | 'lifecycle' | 'innovation' | 'excellence' | 'sustainability' | 'integrity')
       | null;
@@ -1533,6 +1551,27 @@ export interface ConsultationFormBlock {
   blockType: 'consultationForm';
 }
 /**
+ * Forms submitted by visitors requesting consultations, proposals, or demonstrations.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiries".
+ */
+export interface Inquiry {
+  id: number;
+  fullName: string;
+  email: string;
+  phone?: string | null;
+  organization?: string | null;
+  jobTitle?: string | null;
+  solution?: string | null;
+  requestType?: ('consultation' | 'proposal' | 'demo') | null;
+  timeline?: string | null;
+  message?: string | null;
+  status?: ('new' | 'in-review' | 'contacted' | 'closed') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "technologies".
  */
@@ -1544,73 +1583,6 @@ export interface Technology {
   category?: ('partner' | 'framework' | 'platform' | 'tool') | null;
   /**
    * Lower numbers appear first
-   */
-  sortOrder?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "team-members".
- */
-export interface TeamMember {
-  id: number;
-  name: string;
-  /**
-   * e.g. Creative Director, Lead Developer
-   */
-  role: string;
-  photo?: (number | null) | Media;
-  bio?: string | null;
-  /**
-   * Social and profile links
-   */
-  socialLinks?:
-    | {
-        platform: 'linkedin' | 'twitter' | 'github' | 'dribbble' | 'website';
-        url: string;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Lower numbers appear first
-   */
-  sortOrder?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "awards".
- */
-export interface Award {
-  id: number;
-  /**
-   * Year the award was received (YYYY, 2020 onward)
-   */
-  year: number;
-  /**
-   * Name of the award
-   */
-  awardName: string;
-  /**
-   * Category or discipline
-   */
-  category?: string | null;
-  /**
-   * Project or work this award relates to
-   */
-  projectName?: string | null;
-  /**
-   * Optional badge or logo. Upload a new file or choose from existing Media.
-   */
-  image?: (number | null) | Media;
-  /**
-   * Link to award details
-   */
-  link?: string | null;
-  /**
-   * Lower numbers appear first within the same year
    */
   sortOrder?: number | null;
   updatedAt: string;
@@ -1701,6 +1673,73 @@ export interface TrainingProgram {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members".
+ */
+export interface TeamMember {
+  id: number;
+  name: string;
+  /**
+   * e.g. Creative Director, Lead Developer
+   */
+  role: string;
+  photo?: (number | null) | Media;
+  bio?: string | null;
+  /**
+   * Social and profile links
+   */
+  socialLinks?:
+    | {
+        platform: 'linkedin' | 'twitter' | 'github' | 'dribbble' | 'website';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Lower numbers appear first
+   */
+  sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "awards".
+ */
+export interface Award {
+  id: number;
+  /**
+   * Year the award was received (YYYY, 2020 onward)
+   */
+  year: number;
+  /**
+   * Name of the award
+   */
+  awardName: string;
+  /**
+   * Category or discipline
+   */
+  category?: string | null;
+  /**
+   * Project or work this award relates to
+   */
+  projectName?: string | null;
+  /**
+   * Optional badge or logo. Upload a new file or choose from existing Media.
+   */
+  image?: (number | null) | Media;
+  /**
+   * Link to award details
+   */
+  link?: string | null;
+  /**
+   * Lower numbers appear first within the same year
+   */
+  sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "demos".
  */
 export interface Demo {
@@ -1759,23 +1798,10 @@ export interface Redirect {
   from: string;
   to?: {
     type?: ('reference' | 'custom') | null;
-    reference?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null)
-      | ({
-          relationTo: 'services';
-          value: number | Service;
-        } | null)
-      | ({
-          relationTo: 'case-studies';
-          value: number | CaseStudy;
-        } | null);
+    reference?: {
+      relationTo: 'pages';
+      value: number | Page;
+    } | null;
     url?: string | null;
   };
   updatedAt: string;
@@ -1808,15 +1834,10 @@ export interface Search {
   id: number;
   title?: string | null;
   priority?: number | null;
-  doc:
-    | {
-        relationTo: 'posts';
-        value: number | Post;
-      }
-    | {
-        relationTo: 'case-studies';
-        value: number | CaseStudy;
-      };
+  doc: {
+    relationTo: 'pages';
+    value: number | Page;
+  };
   slug?: string | null;
   meta?: {
     title?: string | null;
@@ -1955,16 +1976,12 @@ export interface PayloadLockedDocument {
         value: number | Page;
       } | null)
     | ({
-        relationTo: 'posts';
-        value: number | Post;
+        relationTo: 'inquiries';
+        value: number | Inquiry;
       } | null)
     | ({
         relationTo: 'media';
         value: number | Media;
-      } | null)
-    | ({
-        relationTo: 'categories';
-        value: number | Category;
       } | null)
     | ({
         relationTo: 'customers';
@@ -1973,6 +1990,26 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'technologies';
         value: number | Technology;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'training-programs';
+        value: number | TrainingProgram;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: number | User;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: number | Category;
       } | null)
     | ({
         relationTo: 'team-members';
@@ -1991,14 +2028,6 @@ export interface PayloadLockedDocument {
         value: number | Service;
       } | null)
     | ({
-        relationTo: 'projects';
-        value: number | Project;
-      } | null)
-    | ({
-        relationTo: 'training-programs';
-        value: number | TrainingProgram;
-      } | null)
-    | ({
         relationTo: 'case-studies';
         value: number | CaseStudy;
       } | null)
@@ -2013,10 +2042,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'portfolio';
         value: number | Portfolio;
-      } | null)
-    | ({
-        relationTo: 'users';
-        value: number | User;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -2310,6 +2335,7 @@ export interface PillarsBlockSelect<T extends boolean = true> {
  * via the `definition` "WhyQuantumBlock_select".
  */
 export interface WhyQuantumBlockSelect<T extends boolean = true> {
+  layoutStyle?: T;
   tagline?: T;
   heading?: T;
   description?: T;
@@ -2317,7 +2343,13 @@ export interface WhyQuantumBlockSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
+        badge?: T;
         description?: T;
+        pullquote?: T;
+        image?: T;
+        authorName?: T;
+        authorRole?: T;
+        imagePosition?: T;
         icon?: T;
         id?: T;
       };
@@ -2446,34 +2478,21 @@ export interface ConsultationFormBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts_select".
+ * via the `definition` "inquiries_select".
  */
-export interface PostsSelect<T extends boolean = true> {
-  title?: T;
-  heroImage?: T;
-  content?: T;
-  relatedPosts?: T;
-  categories?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        image?: T;
-        description?: T;
-      };
-  publishedAt?: T;
-  authors?: T;
-  populatedAuthors?:
-    | T
-    | {
-        id?: T;
-        name?: T;
-      };
-  generateSlug?: T;
-  slug?: T;
+export interface InquiriesSelect<T extends boolean = true> {
+  fullName?: T;
+  email?: T;
+  phone?: T;
+  organization?: T;
+  jobTitle?: T;
+  solution?: T;
+  requestType?: T;
+  timeline?: T;
+  message?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2571,26 +2590,6 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories_select".
- */
-export interface CategoriesSelect<T extends boolean = true> {
-  title?: T;
-  generateSlug?: T;
-  slug?: T;
-  parent?: T;
-  breadcrumbs?:
-    | T
-    | {
-        doc?: T;
-        url?: T;
-        label?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "customers_select".
  */
 export interface CustomersSelect<T extends boolean = true> {
@@ -2612,6 +2611,116 @@ export interface TechnologiesSelect<T extends boolean = true> {
   website?: T;
   category?: T;
   sortOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  client?: T;
+  category?: T;
+  solution?: T;
+  summary?: T;
+  focus?: T;
+  result?: T;
+  image?: T;
+  featured?: T;
+  sortOrder?: T;
+  publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "training-programs_select".
+ */
+export interface TrainingProgramsSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  track?: T;
+  level?: T;
+  duration?: T;
+  description?: T;
+  targetAudience?: T;
+  topics?:
+    | T
+    | {
+        topic?: T;
+        id?: T;
+      };
+  featured?: T;
+  sortOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  heroImage?: T;
+  content?: T;
+  relatedPosts?: T;
+  categories?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  publishedAt?: T;
+  authors?: T;
+  populatedAuthors?:
+    | T
+    | {
+        id?: T;
+        name?: T;
+      };
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2698,51 +2807,6 @@ export interface ServicesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "projects_select".
- */
-export interface ProjectsSelect<T extends boolean = true> {
-  title?: T;
-  generateSlug?: T;
-  slug?: T;
-  client?: T;
-  category?: T;
-  solution?: T;
-  summary?: T;
-  focus?: T;
-  result?: T;
-  image?: T;
-  featured?: T;
-  sortOrder?: T;
-  publishedAt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "training-programs_select".
- */
-export interface TrainingProgramsSelect<T extends boolean = true> {
-  title?: T;
-  generateSlug?: T;
-  slug?: T;
-  track?: T;
-  level?: T;
-  duration?: T;
-  description?: T;
-  targetAudience?: T;
-  topics?:
-    | T
-    | {
-        topic?: T;
-        id?: T;
-      };
-  featured?: T;
-  sortOrder?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2833,29 +2897,6 @@ export interface PortfolioSelect<T extends boolean = true> {
   publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  name?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -3368,6 +3409,34 @@ export interface SiteSetting {
    */
   businessHours?: string | null;
   address?: string | null;
+  /**
+   * Configure real-time email delivery when visitors submit consultation and contact inquiries on the website.
+   */
+  emailNotifications?: {
+    enabled?: boolean | null;
+    /**
+     * Comma-separated email addresses that will receive instant alerts for new form submissions.
+     */
+    recipientEmails?: string | null;
+  };
+  /**
+   * Configure the floating WhatsApp contact button displayed at the bottom-right corner of the website.
+   */
+  whatsapp?: {
+    enabled?: boolean | null;
+    /**
+     * Full international number with country code (e.g. +251911234567).
+     */
+    phoneNumber?: string | null;
+    /**
+     * Pre-filled message when a visitor clicks to start a chat.
+     */
+    defaultMessage?: string | null;
+    /**
+     * Label shown beside the button or on hover.
+     */
+    tooltipText?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -3486,6 +3555,20 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   secondaryPhone?: T;
   businessHours?: T;
   address?: T;
+  emailNotifications?:
+    | T
+    | {
+        enabled?: T;
+        recipientEmails?: T;
+      };
+  whatsapp?:
+    | T
+    | {
+        enabled?: T;
+        phoneNumber?: T;
+        defaultMessage?: T;
+        tooltipText?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

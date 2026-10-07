@@ -21,6 +21,7 @@ export const Portfolio: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    hidden: true,
     defaultColumns: ['title', 'mediaType', 'featured', 'publishedAt'],
     useAsTitle: 'title',
   },

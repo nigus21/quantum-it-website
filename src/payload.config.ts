@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url'
 import { en } from '@payloadcms/translations/languages/en'
 // import { bg } from '@payloadcms/translations/languages/bg' // Uncomment for admin UI in Bulgarian
 
+import { Inquiries } from './collections/Inquiries'
 import { Awards } from './collections/Awards'
 import { CaseStudies } from './collections/CaseStudies'
 import { Categories } from './collections/Categories'
@@ -86,6 +87,8 @@ export default buildConfig({
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
   db: vercelPostgresAdapter({
+    // Disable auto schema push/introspection to prevent slow startup and remote DB freezes
+    push: false,
     // DATABASE_URL is the default env var from Vercel (Neon Postgres). Only pass when it's a Postgres URL.
     pool: (() => {
       const url = process.env.DATABASE_URL?.startsWith('postgresql')
@@ -96,22 +99,24 @@ export default buildConfig({
   }),
   collections: [
     Pages,
-    Posts,
+    Inquiries,
     Media,
-    Categories,
     Customers,
     Technologies,
+    Projects,
+    TrainingPrograms,
+    Users,
+    // The following template collections are unused by Quantum IT and are hidden from the admin sidebar via admin.hidden: true
+    Posts,
+    Categories,
     TeamMembers,
     Testimonials,
     Awards,
     Services,
-    Projects,
-    TrainingPrograms,
     CaseStudies,
     LegalPages,
     Demos,
     Portfolio,
-    Users,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, SiteSettings],

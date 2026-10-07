@@ -22,6 +22,7 @@ export const TeamMembers: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    hidden: true,
     defaultColumns: ['name', 'role', 'sortOrder'],
     useAsTitle: 'name',
   },

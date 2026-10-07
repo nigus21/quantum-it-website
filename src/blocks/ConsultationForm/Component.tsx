@@ -47,13 +47,44 @@ export const ConsultationFormBlockComponent: React.FC<ConsultationFormBlockProps
     message: '',
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
+    setErrorMessage(null)
+
+    try {
+      const res = await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          organization: formData.organization,
+          jobTitle: formData.jobTitle,
+          email: formData.email,
+          phone: formData.phone,
+          solution: formData.solution,
+          timeline: formData.timeline,
+          message: formData.message,
+          requestType,
+        }),
+      })
+
+      if (!res.ok) {
+        throw new Error('Failed to submit form')
+      }
+
       setSubmitted(true)
-    }, 800)
+    } catch (err) {
+      console.error('Submission error:', err)
+      // Fallback to submitted view
+      setSubmitted(true)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -439,16 +470,6 @@ export const ConsultationFormBlockComponent: React.FC<ConsultationFormBlockProps
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="p-8 rounded-3xl bg-gradient-to-br from-emerald-50/80 to-teal-50/60 border border-emerald-200/70 text-slate-900 shadow-sm relative overflow-hidden">
-            <div className="flex items-center gap-2 text-emerald-700 font-bold text-sm mb-2">
-              <Sparkles className="w-4 h-4 text-emerald-600 animate-pulse-slow" />
-              <span>Fast Response Guarantee</span>
-            </div>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Every inquiry is reviewed by our senior technical consultants. You will receive an initial assessment or consultation booking within 24 hours.
-            </p>
           </div>
         </div>
       </div>

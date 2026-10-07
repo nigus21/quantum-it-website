@@ -48,6 +48,7 @@ export const Services: CollectionConfig<'services'> = {
     update: authenticated,
   },
   admin: {
+    hidden: true,
     defaultColumns: ['title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) =>

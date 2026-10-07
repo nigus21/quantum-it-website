@@ -315,6 +315,24 @@ html[data-theme='light'] {
   }
 }
 
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
 @keyframes shimmer {
   0% {
     background-position: -200% 0;
@@ -342,7 +360,21 @@ html[data-theme='light'] {
   animation: marquee 32s linear infinite;
 }
 
-.animate-marquee:hover {
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 22s linear infinite;
+}
+
+.animate-marquee-right {
+  display: flex;
+  width: max-content;
+  animation: marquee-right 22s linear infinite;
+}
+
+.animate-marquee:hover,
+.animate-marquee-left:hover,
+.animate-marquee-right:hover {
   animation-play-state: paused;
 }
 
@@ -373,4 +405,120 @@ html[data-theme='light'] {
 
 .quantum-radial-glow {
   background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.08) 40%, transparent 70%);
-}
+}
+
+/* ----------------------------------------------------
+   UNIQUE ANIMATION SUITE: CIRCUIT, ENERGY & 3D CARDS
+   ---------------------------------------------------- */
+
+@keyframes circuit-dash {
+  to {
+    stroke-dashoffset: -200;
+  }
+}
+
+@keyframes energy-flow {
+  0% {
+    stroke-dashoffset: 400;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes border-beam {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+@keyframes node-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+  }
+}
+
+@keyframes card-shimmer {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(250%) skewX(-20deg);
+  }
+}
+
+@keyframes radar-pulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.animate-circuit-dash {
+  animation: circuit-dash 12s linear infinite;
+}
+
+.animate-energy-flow {
+  animation: energy-flow 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-node-pulse {
+  animation: node-pulse 2.5s ease-in-out infinite;
+}
+
+.animate-radar-pulse {
+  animation: radar-pulse 3s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+/* Interactive Card Spotlight Glow */
+.group:hover .card-shimmer-effect {
+  animation: card-shimmer 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glassmorphic Cyber Card Surface */
+.quantum-cyber-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.quantum-cyber-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(16, 185, 129, 0.55);
+  box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.16), 0 0 0 1px rgba(16, 185, 129, 0.2);
+}
+
+/* Glowing Circuit Line Path */
+.quantum-circuit-track {
+  stroke: rgba(226, 232, 240, 0.8);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.quantum-circuit-pulse {
+  stroke: url(#quantumCircuitGradient);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.7));
+}
+

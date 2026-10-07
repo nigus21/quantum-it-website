@@ -82,11 +82,11 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { hero, layout } = page
 
   return (
-    <article>
+    <article className={fullSlug !== 'home' ? 'pt-6 md:pt-10' : ''}>
       <PageClient />
       <PayloadRedirects disableNotFound url={url} />
       {draft && <LivePreviewListener />}
-      <RenderHero {...hero} />
+      {fullSlug === 'home' && <RenderHero {...hero} />}
       <RenderBlocks blocks={layout} />
     </article>
   )
@@ -106,39 +106,64 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   return generateMeta({ doc: page })
 }
 
+import { unstable_cache } from 'next/cache'
+
+async function fetchPageFromDB(
+  fullSlug: string,
+  lastSlug: string,
+  locale: Locale,
+  draft: boolean,
+) {
+  const payload = await getPayload({ config: configPromise })
+  const result = await payload.find({
+    collection: 'pages',
+    draft,
+    limit: 1,
+    locale,
+    pagination: false,
+    overrideAccess: draft,
+    where: {
+      or: [
+        {
+          slug: {
+            equals: fullSlug,
+          },
+        },
+        {
+          slug: {
+            equals: lastSlug,
+          },
+        },
+      ],
+    },
+  })
+
+  return result.docs?.[0] || null
+}
+
+const getCachedPage = (fullSlug: string, lastSlug: string, locale: Locale) =>
+  unstable_cache(
+    async () => fetchPageFromDB(fullSlug, lastSlug, locale, false),
+    ['page-by-slug', fullSlug, lastSlug, locale],
+    {
+      tags: [`pages_${fullSlug}`, 'pages'],
+      revalidate: 60, // Short cache for active development
+    },
+  )()
+
 const queryPageBySlug = cache(
   async ({ slugArray, locale }: { slugArray: string[]; locale: Locale }) => {
     const { isEnabled: draft } = await draftMode()
-    const payload = await getPayload({ config: configPromise })
 
     const fullSlug = slugArray.map(decodeURIComponent).join('/')
     const lastSlug = slugArray[slugArray.length - 1]
       ? decodeURIComponent(slugArray[slugArray.length - 1])
       : fullSlug
 
-    const result = await payload.find({
-      collection: 'pages',
-      draft,
-      limit: 1,
-      locale,
-      pagination: false,
-      overrideAccess: draft,
-      where: {
-        or: [
-          {
-            slug: {
-              equals: fullSlug,
-            },
-          },
-          {
-            slug: {
-              equals: lastSlug,
-            },
-          },
-        ],
-      },
-    })
+    if (draft || process.env.NODE_ENV === 'development') {
+      return fetchPageFromDB(fullSlug, lastSlug, locale, draft)
+    }
 
-    return result.docs?.[0] || null
+    return getCachedPage(fullSlug, lastSlug, locale)
   },
 )

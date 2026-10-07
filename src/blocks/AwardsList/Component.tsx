@@ -15,24 +15,38 @@ function groupAwardsByYear(awards: Award[]): Map<number, Award[]> {
   return sorted
 }
 
+import { unstable_cache } from 'next/cache'
+
+const getCachedAwards = (limit: number) =>
+  unstable_cache(
+    async () => {
+      const payload = await getPayload({ config: configPromise })
+      const result = await payload.find({
+        collection: 'awards',
+        depth: 1,
+        limit,
+        sort: '-year,sortOrder',
+      })
+      return (result.docs || []) as Award[]
+    },
+    ['awards', `${limit}`],
+    {
+      tags: ['awards'],
+      revalidate: 300,
+    },
+  )()
+
 export const AwardsListBlockComponent: React.FC<AwardsListBlock> = async ({
   heading,
   limit = 10,
 }) => {
-  const payload = await getPayload({ config: configPromise })
-  const result = await payload.find({
-    collection: 'awards',
-    depth: 1,
-    limit: limit ?? 10,
-    sort: '-year,sortOrder',
-  })
-  const awards = result.docs as Award[]
+  const awards = await getCachedAwards(limit ?? 10)
   if (!awards.length) return null
 
   const byYear = groupAwardsByYear(awards)
 
   return (
-    <section className="container py-12 md:py-16">
+    <section className="container py-8 md:py-12">
       {heading && (
         <h2 className="mb-8 text-center text-2xl md:text-3xl font-bold text-slate-900">
           {heading}

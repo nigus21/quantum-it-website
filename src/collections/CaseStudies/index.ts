@@ -35,6 +35,7 @@ export const CaseStudies: CollectionConfig<'case-studies'> = {
     update: authenticated,
   },
   admin: {
+    hidden: true,
     defaultColumns: ['title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) =>

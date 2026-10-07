@@ -35,6 +35,7 @@ export const Demos: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    hidden: true,
     defaultColumns: ['title', 'demoType', 'status', 'sortOrder'],
     useAsTitle: 'title',
   },

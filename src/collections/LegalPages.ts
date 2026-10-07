@@ -22,6 +22,7 @@ export const LegalPages: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    hidden: true,
     defaultColumns: ['title', 'slug', 'lastUpdated'],
     useAsTitle: 'title',
   },

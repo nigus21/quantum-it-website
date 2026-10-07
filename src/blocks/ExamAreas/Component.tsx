@@ -28,13 +28,8 @@ export const ExamAreasBlockComponent: React.FC<ExamAreasBlockProps> = ({
   cta,
 }) => {
   return (
-    <section className="container py-12 md:py-20">
+    <section className="container py-8 md:py-12">
       <div className="max-w-3xl mb-12">
-        {tagline && (
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 mb-4 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200/80">
-            {tagline}
-          </div>
-        )}
         {heading && (
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 mb-4">
             {heading}

@@ -17,9 +17,24 @@ export const HeaderNav: React.FC<{ data: HeaderType; locale?: Locale }> = ({
   const [openDropdown, setOpenDropdown] = useState<number | null>(null)
   const [mounted, setMounted] = useState(false)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const navRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setMounted(true)
+  }, [])
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current)
+        setOpenDropdown(null)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
   }, [])
 
   // Lock body scroll when mobile menu is open to prevent double scroll
@@ -47,15 +62,22 @@ export const HeaderNav: React.FC<{ data: HeaderType; locale?: Locale }> = ({
     }, 180)
   }
 
+  const toggleDropdown = (index: number) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    setOpenDropdown((prev) => (prev === index ? null : index))
+  }
+
   const toggleMobileDropdown = (index: number) => {
-    setOpenDropdown(openDropdown === index ? null : index)
+    setOpenDropdown((prev) => (prev === index ? null : index))
   }
 
   const navItems = data?.navItems || []
   const ctaButtons = data?.ctaButtons || []
 
   return (
-    <div>
+    <div ref={navRef}>
       {/* Desktop Navigation */}
       <nav className="hidden lg:flex items-center gap-6">
         {navItems.map((item, i) => {
@@ -85,7 +107,8 @@ export const HeaderNav: React.FC<{ data: HeaderType; locale?: Locale }> = ({
             >
               <button
                 type="button"
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-700 group-hover:text-emerald-600 transition-colors cursor-pointer py-1"
+                onClick={() => toggleDropdown(i)}
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-700 hover:text-emerald-600 group-hover:text-emerald-600 transition-colors cursor-pointer py-1"
                 aria-expanded={openDropdown === i}
               >
                 <span>{item.link?.label}</span>
@@ -110,17 +133,12 @@ export const HeaderNav: React.FC<{ data: HeaderType; locale?: Locale }> = ({
                 <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-[0_20px_50px_rgba(0,0,0,0.12)]">
                   <div className="space-y-1">
                     {(item as any).dropdownItems.map((sub: any, subIdx: number) => (
-                      <div key={subIdx}>
+                      <div key={subIdx} onClick={() => setOpenDropdown(null)}>
                         <CMSLink
                           {...sub.link}
                           appearance="link"
-                          className="block p-2.5 rounded-xl hover:bg-emerald-50 text-sm font-semibold text-slate-800 hover:text-emerald-700 transition-colors"
+                          className="block px-3 py-2 rounded-xl hover:bg-emerald-50 text-sm font-semibold text-slate-800 hover:text-emerald-700 transition-colors"
                         />
-                        {sub.description && (
-                          <span className="block text-[11px] text-slate-500 px-2.5 pb-1">
-                            {sub.description}
-                          </span>
-                        )}
                       </div>
                     ))}
                   </div>
@@ -215,13 +233,8 @@ export const HeaderNav: React.FC<{ data: HeaderType; locale?: Locale }> = ({
                             <CMSLink
                               {...sub.link}
                               appearance="link"
-                              className="block text-sm font-medium text-slate-700 hover:text-emerald-600 py-1.5 px-3 rounded-lg hover:bg-white"
+                              className="block text-sm font-medium text-slate-700 hover:text-emerald-600 py-2 px-3 rounded-lg hover:bg-white"
                             />
-                            {sub.description && (
-                              <span className="block text-[11px] text-slate-500 px-3 pb-1">
-                                {sub.description}
-                              </span>
-                            )}
                           </div>
                         ))}
                       </div>
