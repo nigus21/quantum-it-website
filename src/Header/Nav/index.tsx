@@ -15,6 +15,7 @@ export const HeaderNav: React.FC<{ data: HeaderType; locale?: Locale }> = ({
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<number | null>(null)
+  const [openMobileDropdown, setOpenMobileDropdown] = useState<number | null>(null)
   const [mounted, setMounted] = useState(false)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const navRef = useRef<HTMLDivElement>(null)
@@ -23,7 +24,7 @@ export const HeaderNav: React.FC<{ data: HeaderType; locale?: Locale }> = ({
     setMounted(true)
   }, [])
 
-  // Close dropdown on outside click
+  // Close desktop dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(event.target as Node)) {
@@ -70,7 +71,7 @@ export const HeaderNav: React.FC<{ data: HeaderType; locale?: Locale }> = ({
   }
 
   const toggleMobileDropdown = (index: number) => {
-    setOpenDropdown((prev) => (prev === index ? null : index))
+    setOpenMobileDropdown((prev) => (prev === index ? null : index))
   }
 
   const navItems = data?.navItems || []
@@ -172,7 +173,13 @@ export const HeaderNav: React.FC<{ data: HeaderType; locale?: Locale }> = ({
       <div className="flex lg:hidden items-center">
         <button
           type="button"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          onClick={() => {
+            const nextState = !mobileMenuOpen
+            setMobileMenuOpen(nextState)
+            if (!nextState) {
+              setOpenMobileDropdown(null)
+            }
+          }}
           className="p-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 shadow-sm hover:border-emerald-300 transition-colors cursor-pointer"
           aria-label="Toggle menu"
           aria-expanded={mobileMenuOpen}
@@ -197,7 +204,10 @@ export const HeaderNav: React.FC<{ data: HeaderType; locale?: Locale }> = ({
                   return (
                     <div
                       key={i}
-                      onClick={() => setMobileMenuOpen(false)}
+                      onClick={() => {
+                        setMobileMenuOpen(false)
+                        setOpenMobileDropdown(null)
+                      }}
                       className="py-3 border-b border-slate-100"
                     >
                       <CMSLink
@@ -209,31 +219,40 @@ export const HeaderNav: React.FC<{ data: HeaderType; locale?: Locale }> = ({
                   )
                 }
 
-                const isOpen = openDropdown === i
+                const isMobileOpen = openMobileDropdown === i
 
                 return (
                   <div key={i} className="py-1 border-b border-slate-100">
                     <button
                       type="button"
-                      onClick={() => toggleMobileDropdown(i)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggleMobileDropdown(i)
+                      }}
                       className="w-full flex items-center justify-between text-base font-semibold text-slate-800 py-3 cursor-pointer"
                     >
                       <span>{item.link?.label}</span>
                       <ChevronDown
                         className={`w-4 h-4 transition-transform duration-200 ${
-                          isOpen ? 'rotate-180 text-emerald-600' : 'text-slate-400'
+                          isMobileOpen ? 'rotate-180 text-emerald-600' : 'text-slate-400'
                         }`}
                       />
                     </button>
 
-                    {isOpen && (
+                    {isMobileOpen && (
                       <div className="pl-2 py-2 space-y-1.5 bg-slate-50/80 rounded-xl my-1 border border-slate-100/80">
                         {(item as any).dropdownItems.map((sub: any, subIdx: number) => (
-                          <div key={subIdx} onClick={() => setMobileMenuOpen(false)}>
+                          <div
+                            key={subIdx}
+                            onClick={() => {
+                              setMobileMenuOpen(false)
+                              setOpenMobileDropdown(null)
+                            }}
+                          >
                             <CMSLink
                               {...sub.link}
                               appearance="link"
-                              className="block text-sm font-medium text-slate-700 hover:text-emerald-600 py-2 px-3 rounded-lg hover:bg-white"
+                              className="block text-sm font-medium text-slate-700 hover:text-emerald-600 py-2.5 px-3 rounded-lg hover:bg-white active:bg-emerald-50 transition-colors"
                             />
                           </div>
                         ))}
